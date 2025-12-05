@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bofa Rush Ironman Guide v1.4</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .progress-bar-container {
+            background: rgba(255,255,255,0.2);
+            height: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .controls {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .content {
+            padding: 30px;
+            max-height: calc(100vh - 400px);
+            overflow-y: auto;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: background 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+        }
+
+        .section-header .toggle {
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+
+        .section-header.collapsed .toggle {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            padding: 20px;
+            background: #fff;
+            display: block;
+        }
+
+        .section-content.collapsed {
+            display: none;
+        }
+
+        .subsection {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 3px solid #667eea;
+        }
+
+        .subsection-title {
+            font-weight: 600;
+            font-size: 1.05em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .task {
+            display: flex;
+            align-items: flex-start;
+            padding: 8px 0;
+            transition: background 0.2s ease;
+            border-radius: 4px;
+            padding-left: 8px;
+            margin: 2px 0;
+        }
+
+        .task:hover {
+            background: #f8f9fa;
+        }
+
+        .task input[type="checkbox"] {
+            margin-right: 12px;
+            margin-top: 4px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .task label {
+            cursor: pointer;
+            flex: 1;
+            user-select: none;
+        }
+
+        .task input[type="checkbox"]:checked + label {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+
+        .task.diary {
+            background: #fff3cd;
+            padding-left: 12px;
+            border-left: 3px solid #ffc107;
+        }
+
+        .task.inventory {
+            background: #d1ecf1;
+            padding-left: 12px;
+            border-left: 3px solid #17a2b8;
+        }
+
+        .task.optional {
+            background: #e7f3ff;
+            padding-left: 12px;
+            border-left: 3px solid #0066cc;
+        }
+
+        .note {
+            background: #f8f9fa;
+            border-left: 4px solid #6c757d;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        .important {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5568d3;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bofa Rush Ironman Guide v1.4</h1>
+            <p>by Kirbuti (last update: 28 July 2023)</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar">0%</div>
+            </div>
+        </header>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="expandAll()">Expand All</button>
+            <button class="btn btn-primary" onclick="collapseAll()">Collapse All</button>
+            <button class="btn btn-secondary" onclick="exportProgress()">Export Progress</button>
+            <button class="btn btn-secondary" onclick="importProgress()">Import Progress</button>
+            <button class="btn btn-danger" onclick="resetProgress()">Reset All</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-label">Total Tasks</div>
+                <div class="stat-value" id="totalTasks">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Completed</div>
+                <div class="stat-value" id="completedTasks">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Remaining</div>
+                <div class="stat-value" id="remainingTasks">0</div>
+            </div>
+        </div>
+
+        <div class="content" id="guideContent">
+            <!-- Guide content will be generated here -->
+        </div>
+    </div>
+
+    <script>
+        const guideData = {
+            "Section 0: Setup/General notes": {
+                introduction: [
+                    "This guide is designed to prioritize: 1. Rushing 43 Prayer while as low of a combat level as possible, 2. Obtaining barrows gloves, 3. Completing Song of the Elves immediately afterwards, 4. Begin completing Corrupted Gauntlet with stats that are reasonable to do so",
+                    "Many thanks to Oziris, B0aty, Alfie, and others for development of prior ironman guides."
+                ],
+                tasks: [
+                    "Set up authenticator for account AND email associated with account",
+                    "See article on using one email for multiple RS accounts: https://support.runescape.com/hc/en-gb/articles/360001332737-Use-the-same-login-email-for-different-accounts"
+                ],
+                notes: [
+                    "XP lamps go to Herblore unless otherwise specified (for lamps w/ lvl reqs, try to get the level beforehand)",
+                    "After buying Chronicle you should always carry and/or wear an emergency tele",
+                    "While low hitpoints, emergency food recommended",
+                    "While low level, keep at least 15% run energy to get gap if attacked",
+                    "While low level, accept all random events that give gp, gems, etc."
+                ]
+            },
+            "Section 1: Unlocking Ardougne Cloak": {
+                "1A. Starting Off": [
+                    "Complete Tutorial Island, don't forget to finalize ironman status",
+                    "In Lumbridge, sell to general store: bronze weapons, bronze axe, wooden shield, shortbow",
+                    "Buy spade from general store",
+                    "Drop air/mind runes, claim more from tutor",
+                    "[Diary] Lumbridge Easy: Pickpocket a man/woman",
+                    "Pick up all the spawns in Lumbridge castle kitchen and basement",
+                    "Start Rune Mysteries, get air talisman",
+                    "Get 15 Firemaking using log spawns on castle top floor. Bank least 4 ashes and 7 logs",
+                    "Fletch 1000 arrow shafts from these log spawns",
+                    "[INV] Bread, shrimps",
+                    "Use Count Check's one-time teleport to Barbarian Village",
+                    "Go north to hall, take one piece of cooked beef and burn it",
+                    "Pick up more food spawns in hall (hop worlds for extra, shouldn't need more than 5)",
+                    "Stronghold of Security Floors 1-3 for 10k gp",
+                    "[Diary] Varrock Easy: Enter second level of Stronghold of Security",
+                    "(Optional) Complete last floor for fancy boots",
+                    "[Diary] Varrock Medium: Perform the 4 emotes from Stronghold of Security",
+                    "Home tele to Lumbridge",
+                    "Buy steel axe from Bob",
+                    "Start The Restless Ghost",
+                    "Complete Misthalin Mystery",
+                    "[INV] Spade, all your air/mind runes, air talisman",
+                    "Start Cooks Assistant",
+                    "Start X Marks the Spot",
+                    "Drop runes, collect more from tutor if you can",
+                    "Start Sheep Shearer",
+                    "Pick up 1 egg from Fred's house",
+                    "First two clues of X Marks the Spot (Lumbridge)",
+                    "Kill a giant rat west of castle w/ air strike, keep meat (Druidic Ritual) and bones (Demon Slayer)",
+                    "Head west (north of fence), then south, talk to Urhney, equip amulet",
+                    "Pick up 5 swamp tar near swamp cave entrance",
+                    "(Optional) If you plan to tick manipulate for skilling, grab another 15 swamp tar",
+                    "Continue Restless Ghost w/ Ghost in Lumbridge",
+                    "Go to Wizards Tower, continue Rune Mysteries and The Restless Ghost",
+                    "Go to Draynor",
+                    "Start Vampyre Slayer",
+                    "Grab 3 garlic from Morgan's house",
+                    "Grab 2 cheese from Aggie's house",
+                    "Draynor steps of X Marks the Spot",
+                    "Buy in Draynor: Chronicle, 10 cards, 5+ wines for emergency food, forestry kit",
+                    "[INV] 5000 gp, spade, treasure scroll, 18 free spaces",
+                    "Complete Ernest the Chicken",
+                    "Pick up bronze med helm spawn in Draynor Manor",
+                    "Complete X Marks the Spot",
+                    "Buy in Port Sarim: wizard hat, 2 eye of newt, fly fishing rod, 10 sardines, 15 feather packs",
+                    "Start Pirate's Treasure (just talk to Redbeard Frank)",
+                    "Sail to Zeah",
+                    "Complete Client of Kourend (walk between each house)",
+                    "[Diary] Kourend/Kebos Easy: Pray at the altar on top floor of Kourend castle",
+                    "Dig for Clue hunter garb in Shayzien",
+                    "Grab 5 snape grass on Hosidius coast",
+                    "Sail to Land's End, bank for next section",
+                    "[Diary] Kourend/Kebos Easy: Sail to Land's End",
+                    "[INV] 1 rat meat, 1 eye of newt, spade, 250 coins, 18 free spaces, strike casts, XP lamps",
+                    "Take boat back to Port Sarim",
+                    "Do Pirate's Treasure Karamja & Port Sarim sections, get key from Redbeard Frank",
+                    "[Diary] Karamja Easy: Pick 5 bananas in the plantation",
+                    "[Diary] Karamja Easy: Travel to Port Sarim from Musa Point",
+                    "Buy from Falador Farm: rake, seed dibber, trowel, secateurs, watering can, 5 plant cure",
+                    "Store all of this in Leprechaun",
+                    "[Diary] Falador Easy: View Sarah's Farming shop",
+                    "Kill 2 cows by Crafting Guild, take all loot",
+                    "Grab onion north of Rimmington (just one, you'll buy more later)",
+                    "Complete Witch's Potion",
+                    "Kill rat in archery store for tail",
+                    "Boat from Rimmington to Ardougne"
+                ],
+                "1B. Kandarin Part 1": [
+                    "[INV] Jug of water, logs, bucket of water, 1010+ gp, XP lamps, forestry kit",
+                    "Complete Monk's Friend",
+                    "(Optional) Complete Clock Tower (neither the gp nor qp is needed)",
+                    "Buy 2 swamp paste in Port Khazard",
+                    "Complete Hazeel Cult, side with Hazeel (no combat)",
+                    "Buy POH from Estate Agent in Ardougne",
+                    "Use lamps from X Marks the Spot and Client of Kourend on Construction",
+                    "Thieve cakes for food until 20 Thieving, then silk to 21 (need at least 10 silk for future quests)",
+                    "Bank 15 bread",
+                    "[Diary] Ardougne Easy: Steal a cake",
+                    "[Diary] Ardougne Easy: Check pets with Probita",
+                    "[Diary] Ardougne Easy: Use altar in East Ardougne",
+                    "Complete Sheep Herder (bring 100 gp to start)",
+                    "Buy from Ardy General store: 3 ropes, 5 vials, 30 balls of wool, 7 papyrus",
+                    "Complete Tribal Totem",
+                    "Chop and light normal logs/oaks to 30 Firemaking (several trees SE of Zoo)",
+                    "[Diary] Ardougne Easy: Sell silk to silk trader (sell back one that you stole earlier)",
+                    "Complete Sea Slug (bring small fishing net)",
+                    "[Diary] Ardougne Medium: Fish shrimp on the platform",
+                    "Walk to Catherby (be careful of bats near Keep Le Faye)",
+                    "Start Fishing Contest (West side of mountain)",
+                    "[Diary] Kandarin Easy: Buy a candle in Catherby",
+                    "Buy 15 pineapples from Charter ship and put into compost bin",
+                    "[Diary] Kandarin Easy: Talk to Sherlock",
+                    "[Diary] Kandarin Easy: Play church organ",
+                    "[Diary] Kandarin Easy: Pick 5 flax",
+                    "[INV] Pot, spade, 10 coins, fishing pass, garlic, 16 free inventory slots",
+                    "Complete Murder Mystery",
+                    "Continue Fishing Contest (vines, contest)",
+                    "Buy fishing rod from Grandpa Jack for 5 gp",
+                    "Walk south around Fishing Guild",
+                    "Dig for Clue hunter gloves/boots south of Fishing Guild",
+                    "Walk northwest to Barbarian Assault, unlock Minigame Teleport",
+                    "Talk to Captain Cain, there will be a dialogue option to skip full Tutorial",
+                    "Test the teleport to make sure you unlocked it",
+                    "Start Barcrawl",
+                    "Pick up one inventory of planks (hop a few worlds)",
+                    "[INV] Rope, hammer, food",
+                    "Start Waterfall Quest, get to step where you need to go to Tree Gnome Village (remember to read book)",
+                    "Start Dwarf Cannon, complete until needing to go to Ice Mountain",
+                    "Walk to Gnome Stronghold",
+                    "Train to 10 Agility at Gnome Stronghold course",
+                    "[Diary] Western Easy: Complete lap of Gnome course",
+                    "Barcrawl Grand Tree",
+                    "Buy in Grand Tree: 3 vodka, 1 dwellberries, 1 choc dust, 5 choc bars, 5 milk, gnome spice, 4 flour, 12 onions, 1 orange",
+                    "Make hangover cure, 1 bread dough, 1 pastry dough",
+                    "Buy 1000 bronze arrowtips on 3rd floor",
+                    "Minigame tele to Clan Wars, go north of Ferox to pick up 2 iron bars (HCIM risk)",
+                    "Go back into Ferox, restore energy at pool",
+                    "[INV] Dwellberries, rope, spade, 4 buckets of water, hangover cure, food",
+                    "Go into Ferox basement, use Soul Wars portal",
+                    "Exit Soul Wars portal into Edgeville, use lever into Wilderness and back to Ardougne (HCIM risk)",
+                    "[Diary] Ardougne Easy: Use lever to teleport to Wilderness (HCIM risk) (take lever one extra time)",
+                    "[Diary] Wilderness Easy: Enter wilderness from lever",
+                    "Complete Plague City"
+                ],
+                "1C. Asgarnia": [
+                    "Boat to Rimmington, walk to Draynor",
+                    "Train to 20 Agility on Draynor Rooftop",
+                    "[Diary] Lumbridge Easy: Complete Draynor Rooftop course",
+                    "[INV] Cabbage, bronze med helm, bucket, 400+ gp, food, pickaxe, chronicle",
+                    "Walk to Falador",
+                    "Buy iron chainbody from Wayne",
+                    "Start The Knight's Sword",
+                    "Start Black Knight's Fortress",
+                    "[Diary] Falador Easy: Get a haircut (free as of 9 November 2022)",
+                    "[Diary] Falador Easy: Fill a bucket with pump north of bank",
+                    "Barcrawl Falador",
+                    "Buy 5 wizard's mind bombs from Falador Pub",
+                    "Buy 8 woad leaves from Wyson (select the 20 gp option to get two leaves at a time)",
+                    "Continue Black Knights' Fortress (entire Fortress section)",
+                    "Continue Dwarf Cannon at Ice Mountain",
+                    "Chronicle to Varrock",
+                    "Mine 7 clay by Champions' Guild",
+                    "Start Gertrude's Cat, make a seasoned sardine",
+                    "Make 7 soft clay at bank",
+                    "[INV] 4500 gp, research package, Redbeard's key, bucket of milk, seasoned sardine, steel axe, barcrawl card, bones",
+                    "Buy from Thessalia: pink skirt and priest gown top & bottom",
+                    "[Diary] Varrock Easy: Browse Thessalia's store",
+                    "Start Romeo & Juliet",
+                    "Start Demon Slayer",
+                    "Talk to Prysin about keys, get first key from guard in tower",
+                    "Talk to Reldo for The Knight's Sword",
+                    "Grab bucket (upstairs) and pie dish from kitchen, fill bucket at sink",
+                    "Wash the drain outside the palace",
+                    "Start Priest in Peril (talk to King Roald)",
+                    "Go into sewers to get second key for Demon Slayer",
+                    "Barcrawl Blue Moon",
+                    "Buy 4 beers at Blue Moon Inn",
+                    "Talk to Dr Harlow for Vampyre Slayer (get stake)",
+                    "Continue Pirate's Treasure (open chest upstairs, read the clue)",
+                    "Talk to Aubury for Rune Mysteries (give him research package)",
+                    "[Diary] Varrock Easy: Give a dog a bone",
+                    "Start Daddy's Home, get the 3 waxwood logs",
+                    "[INV] Bucket of milk, seasoned sardine, axe, 3 waxwood logs, barcrawl card, 4000 gp, rest open slots",
+                    "Go to Sawmill for Gertrude's Cat and Daddy's Home",
+                    "Buy 5 bolts of cloth and 100 steel nails",
+                    "[Diary] Varrock Easy: Chop dead tree in Lumberyard and make a plank from it (2 tasks)",
+                    "Barcrawl NE Varrock",
+                    "Complete Varrock Museum Quiz",
+                    "[Diary] Varrock Easy: Steal 1 tea from tea stall",
+                    "Buy rotten tomato from crate east of General store",
+                    "[Diary] Varrock Easy: Buy newspaper from Benny",
+                    "Complete Gertrude's Cat",
+                    "Keep chocolate cake for Desert Treasure and stew for The Queen of Thieves",
+                    "Start raising kittens, for now feed them with the sardines you bought earlier",
+                    "(Optional) Keep a ball of wool with you to keep kittens happy for 50 minutes at a time",
+                    "Continue Romeo & Juliet (talk to Juliet, give letter to Romeo, go to Father Lawrence)",
+                    "Buy staff of fire from Zaff",
+                    "Complete Daddy's Home",
+                    "Sell 8 bolts of cloth back to Sawmill (sell 1 per world for a bit more gp back)",
+                    "Buy 300 mind runes, 800 air runes from Aubury",
+                    "[INV] Strike casts (all), pickaxe, 19 free spaces",
+                    "Go SE of Varrock, kill bear for meat (Druidic Ritual), pick up bones for Demon Slayer",
+                    "Pick 16 redberries and 1 cadava berries",
+                    "[Diary] Varrock Easy: Mine iron southeast of Varrock",
+                    "Complete Romeo & Juliet",
+                    "Bank the redberries",
+                    "Go to Barbarian Village and safespot barbarians in longhall until 13 Magic",
+                    "Keep bones drops for Demon Slayer",
+                    "Teleport to Lumbridge",
+                    "[INV] 20 balls of wool, egg, milk, flour, bread dough, ghost's skull, gp",
+                    "Complete Cook's Assistant",
+                    "[Diary] Lumbridge Easy: Make bread on castle range",
+                    "Grab axe, tinderbox, pickaxe, small fishing net from bank",
+                    "[Diary] Lumbridge Easy: Learn age from Hans",
+                    "Complete The Restless Ghost",
+                    "[Diary] Lumbridge Easy: Chop and burn oak logs in Lumbridge",
+                    "Complete Sheep Shearer",
+                    "[INV] Pickaxe, small fishing net, gp, 10 free spaces",
+                    "Go to Al-Kharid",
+                    "[Diary] Lumbridge Easy: Mine iron ore from Al-Kharid mine",
+                    "Buy everything from crafting shop except bolt mould. Also buy 3 needles and 50 thread",
+                    "Start Prince Ali Rescue (talk to Hassan, then Osman)",
+                    "[Diary] Lumbridge Easy: Fish anchovies south of Al-Kharid bank",
+                    "Buy from Shantay: desert outfit, 10 waterskins, 1 empty waterskin, 10 passes, 4 bronze bars",
+                    "Make pie shell, raw redberry pie",
+                    "[INV] Falador teletab, house teletab, pickaxe, coins, food, raw redberry pie, bucket, gp",
+                    "Get thrown in jail and 'teleported' to Port Sarim",
+                    "[Diary] Falador Easy: Get security book from guard on upper level of jail",
+                    "Go north to house with range, cook redberry pie",
+                    "Continue The Knight's Sword",
+                    "Talk to Thurgo, give him pie, ask about sword",
+                    "Go into dungeon and mine 2 blurite ore",
+                    "Falador teletab, talk to Squire and get portrait from Sir Vyvin's room",
+                    "House teletab to Rimmington, return to Thurgo and get sword",
+                    "Run back to Falador",
+                    "Complete The Knight's Sword",
+                    "Complete Pirate's Treasure (Falador garden, kill level 5 gardener)",
+                    "[Diary] Falador Easy: Kill a duck in Falador Park",
+                    "Complete Black Knights' Fortress",
+                    "[INV] 3 bronze bars, hammer, 30-50 feathers, shantay passes, waterskins (1 empty), knife, food, strike casts",
+                    "Teleport to Lumbridge, go to Al-Kharid",
+                    "Complete The Tourist Trap",
+                    "[Diary] Desert Easy: Enter the desert while wearing desert robes",
+                    "[Diary] Desert Easy: Cut open a desert cactus to fill a waterskin",
+                    "XP Rewards on Agility",
+                    "[Diary] Lumbridge Medium: Complete Al-Kharid Rooftop Course",
+                    "[INV] Notes (Rune Mysteries), 25 bones, 10 gp if banking in Al-Kharid",
+                    "If you still need 25 bones, kill chickens in Lumbridge or pick up spawns in Edgeville Dungeon",
+                    "Go to Wizard's Tower",
+                    "Get Demon Slayer key from Traiborn",
+                    "Complete Rune Mysteries",
+                    "[Diary] Lumbridge Easy: Teleport to essence mine with Sedridor",
+                    "Get food from Draynor bank, pickpocket HAM members for rusty sword and steel pickaxe",
+                    "(Optional) Get an extra rusty sword- small chance 1 won't get Ardy task done",
+                    "[Diary] Lumbridge Easy: Enter the HAM Hideout",
+                    "Also keep any HAM robes, gems, herbs, and 1 polished buttons",
+                    "Make dyes at Aggie: 4 red (12 redberries), 4 blue (8 woad leaves), 5 yellow (10 onions)",
+                    "Talk to Ned to make wig for Prince Ali Rescue, dye it yellow",
+                    "Get imprint for Prince Ali Rescue (soft clay, be careful of jail guards)",
+                    "Buy rainbow scarf from Diango (counts as warm clothing at Wintertodt)",
+                    "Buy some seeds from Olivia for initial birdhouses later (1k is enough)",
+                    "[INV] Spade, strike casts, blue/orange dyes, rat/bear/beef/chicken, fishing trophy, bronze bar, imprint, food, gp",
+                    "Walk to Falador",
+                    "[Diary] Falador Easy: Climb over Falador western wall",
+                    "Complete Goblin Diplomacy (3 mails in crates in the village)",
+                    "Complete Fishing Contest on the east side of the mountain",
+                    "Complete Druidic Ritual",
+                    "Buy pestle & mortar from Jatix",
+                    "Teleport to Lumbridge, go to Al-Kharid, get key from Osman"
+                ],
+                "1D. Kandarin Part 2": [
+                    "[INV] Spade, 2 rusty swords, barcrawl card, 1000 gp",
+                    "Minigame tele to Clan Wars, drink refreshment pool",
+                    "Portal to Castle Wars",
+                    "Go to Yanille (stay south of lake to avoid ogres)",
+                    "Barcrawl Yanille",
+                    "Buy a Greenman's ale and hunter gear in Yanille",
+                    "Buy: Butterfly net, butterfly jar, noose wand, 2 bird snares, 5 box traps, teasing stick",
+                    "[Diary] Ardougne Easy: View Aleck's Hunter shop",
+                    "Dig for Clue Hunter cloak SE of Yanille",
+                    "Go to Port Khazard",
+                    "[Diary] Ardougne Easy: Start a game of Fishing Trawler (can leave immediately after boat launches)",
+                    "[Diary] Ardougne Easy: Have Tindel identify a rusty sword",
+                    "Buy from Charter Ship: 13 buckets of slime, 4 seaweed, 4 buckets of sand",
+                    "[INV] Strike casts, barcrawl card, food, 4 seaweed, 4 buckets of sand, gp",
+                    "Go to Ardougne",
+                    "Make 4 molten glass at Ardougne furnace",
+                    "Start Biohazard (complete sections in Ardougne)",
+                    "Kill mourner (Level 11, 19 hp) with fire strike",
+                    "Boat to Rimmington, give vials to artists",
+                    "Barcrawl Port Sarim",
+                    "[INV] 3 beers, rope, bronze key, wig, skin paste, pink skirt, food",
+                    "Go to Draynor, rescue Prince Ali (HCIMs be careful of jail guards)",
+                    "Minigame tele to Clan Wars, recharge run, leave Ferox to the south (HCIM risk)",
+                    "Start Enter The Abyss (talk to Mage in Wildy, get scrying orb in Varrock)",
+                    "Have Aubury teleport you to the essence mine with scrying orb in inventory",
+                    "[Diary] Varrock Easy: Have Aubury teleport you to essence mine",
+                    "[INV] Scrying orb, 50+ coins, priest gown top/bottom, plague sample, touch paper, barcrawl card, pickaxe",
+                    "Continue Biohazard (Varrock section)",
+                    "[Diary] Varrock Easy: Jump over fence south of Varrock",
+                    "Minigame tele to Fishing Trawler",
+                    "[Diary] Ardougne Easy: Have Cromperty teleport you to the essence mine with scrying orb in inventory",
+                    "Complete Biohazard",
+                    "[Diary] Ardougne Easy: Enter Combat Training Camp",
+                    "Barcrawl Ardougne",
+                    "Complete Ardougne Easy Diary, use XP on Agility",
+                    "Grab pickaxe from bank, mine iron by Monastery to 17 Mining (bank these and cloak tele to get back)",
+                    "[INV] 2k+ coins, barcrawl card, small fishing net, food, knife, Ardy diary lamp (if below 30 agil), chronicle",
+                    "Minigame tele to Fight Pits (or take boat to Brimhaven if tele is on cooldown)",
+                    "[Diary] Karamja Easy: Attempt the Fight Cave or Fight Pits",
+                    "[Diary] Karamja Hard: Win the Fight Pits (skip if you don't have an alt)",
+                    "[Diary] Karamja Easy: Use the fishing spots at the banana plantation",
+                    "Barcrawl Musa Point",
+                    "Buy a Karamjan rum",
+                    "Pick a banana nearby, slice it, use on rum to make banana rum for Tai Bwo Wannai Trio",
+                    "Barcrawl Brimhaven (SE bar)",
+                    "[Diary] Karamja Easy: Go to Moss Giant Island",
+                    "[Diary] Karamja Easy: Collect 5 seaweed on Karamja (pick up and drop one spawn 5 times)",
+                    "Buy one 3-dose antipoison from Jiminua (just get one for now- these are expensive and gp is limited right now)",
+                    "Walk south, stay along the coast to not get hit by things from Tai Bwo Wannai Cleanup",
+                    "Fish at least 200 karambwanji to feed kittens",
+                    "[Diary] Karamja Easy: Go to Cairn Isle",
+                    "Chronicle to Champions' Guild",
+                    "Start Dragon Slayer I, minigame tele to Soul Wars (walk if on cooldown), talk to Oziach",
+                    "[Diary] Varrock Medium: Enter the Champions' Guild",
+                    "Pick up leather gloves in Edgeville, equip, grab 3 nettles",
+                    "[INV] Axe, fly fishing rod, 500 feathers, 2 soft clay, chronicle",
+                    "Bank anywhere for the items listed here^",
+                    "Chronicle to Champions' Guild (again)",
+                    "Continue Dragon Slayer I, ask all questions",
+                    "Go to Barbarian Village",
+                    "Craft 2 unfired bowls, only fire one of them",
+                    "[Diary] Varrock Easy: Spin and fire a bowl in Barbarian Village",
+                    "Fish trout to 30 Fishing in Barbarian Village",
+                    "Bank a few of these to cook later for Death Plateau (10 cooked trout needed)",
+                    "[Diary] Varrock Easy: Catch trout at Barbarian Village",
+                    "Home tele to Lumbridge, fish trout/salmon to 35 Fishing",
+                    "[Diary] Lumbridge Medium: Catch salmon in River Lum",
+                    "Start The Lost Tribe (until you pick up the Brooch)",
+                    "Get antifire shield from Duke for Dragon Slayer I",
+                    "Go to Al-Kharid, complete Prince Ali Rescue",
+                    "If somehow not yet 30 Agility, train on Al-Kharid course and use the Ardy Diary lamp on Agility"
+                ]
+            },
+            "Section 2: Tempoross, Wintertodt, 43 Prayer, Combat Quests": {
+                "2A. Tempoross": [
+                    "Go to Tempoross until 65 Fishing. Raise kittens in the process.",
+                    "During Tempoross grind: Buy 1000 feathers (or 10 packs) and 1 inventory of bronze bars",
+                    "Complete Observatory Quest (3 planks, molten glass, bronze bar, food)",
+                    "After Tempoross grind, boat back to Al-Kharid",
+                    "If you did not get any sapphire necklaces from Tempoross caskets, craft up to 10 of them",
+                    "Minigame tele to Soul Wars, grab knife from bank, leave to Edgeville",
+                    "Take lever to Wildy, go to Mage Bank (HCIM risk but recommend doing this anyways)",
+                    "Buy 20 cosmic runes",
+                    "Enchant sapphire necklaces into games necklaces",
+                    "Cook some of the raw fish you got from Tempoross rewards. This is your food supply for Wintertodt"
+                ],
+                "2A-Alt. Ali's Rune Shop": [
+                    "<<<Only do this if you are a HCIM and do not want to go to Mage Bank, otherwise skip to Section 2B>>>",
+                    "If you are below 5,842 Thieving XP, go to Ardougne and steal cakes or silk until you get there",
+                    "[INV] Stew, hammer, gp for boats",
+                    "Boat to Rimmington, walk to Port Sarim, boat to Zeah, walk to Piscarilius",
+                    "Complete The Queen of Thieves",
+                    "Walk to Hosidius, plow fields to 5% favour, make 100 fertilizer to 15% favour",
+                    "Train to at least 46,512 Thieving XP (level 42) at Fruit stalls",
+                    "Teleport to Lumbridge, walk to Al-Kharid",
+                    "[INV] Any gloves, 4 buckets, gp, casts/gear for The Feud guys (safespottable)",
+                    "Complete The Feud",
+                    "[Diary] Desert Easy: Travel to Pollnivneach by carpet",
+                    "Get 4 Ugthanki dung",
+                    "Unlock Ali's Rune Shop",
+                    "Buy 20 cosmic runes",
+                    "Enchant sapphire necklaces into games necklaces"
+                ],
+                "2B. Wintertodt": [
+                    "Chop and burn logs to 50 firemaking (bring forestry kit)",
+                    "Chop oaks to 30, willows to 35, teaks to 50",
+                    "Go to Wintertodt until 60 Woodcutting, saving all crates. Raise kittens in the process",
+                    "Open the crates at 60 woodcutting, using full inv trick to get extra rolls from each crate",
+                    "[Diary] Kourend/Kebos Medium: Subdue the Wintertodt",
+                    "Complete Witch's House",
+                    "Use supplies from Temp/Todt to get 27 Crafting, craft a sapphire amulet and enchant into Amulet of Magic"
+                ],
+                "2C. Lava Dragons & Wilderness tasks": [
+                    "Buy 7500 casts of fire strike (82500 gp), kill lava dragons for bones",
+                    "[Diary] Wilderness Hard: Kill lava dragon and bury its bones on Lava Dragon Isle",
+                    "[Diary] Wilderness Easy: Cast low alchemy at the fountain of rune",
+                    "[Diary] Wilderness Easy: Pray at the Chaos altar in level 38 Wilderness",
+                    "[Diary] Wilderness Easy: Enter the KBD lair",
+                    "[Diary] Wilderness Easy: Equip any team cape in the Wilderness",
+                    "[Diary] Wilderness Easy: Restore some prayer points at the Demonic ruins",
+                    "[Diary] Wilderness Easy: Kill a mammoth (SE of Ferox)"
+                ],
+                "2D. Early Combat Quests": [
+                    "[INV] Strike casts, 5 coins, 6 logs, scrying orb, food",
+                    "Complete Fight Arena",
+                    "Complete Tree Gnome Village",
+                    "Pick up purple dye for RFD goblins later",
+                    "Continue Waterfall Quest, get Glarial's Pebble from Gnome Village",
+                    "Take tree to Grand Exchange, then Gnome Stronghold",
+                    "[Diary] Varrock Medium: Use spirit tree at Grand Exchange",
+                    "[Diary] Western Medium: Travel to Gnome Stronghold by spirit tree",
+                    "Have Brimstail teleport you to ess mine w/ scrying orb for Enter The Abyss",
+                    "[Diary] Western Easy: Have Brimstail teleport you to essence mine",
+                    "[Diary] Western Easy: Kill a terrorbird in enclosure (SW area of Stronghold)",
+                    "[Diary] Western Easy: Score a goal in gnomeball",
+                    "Pick up two toads NW of Grand Tree",
+                    "[Diary] Western Easy: Pick up a toad in Gnome Stronghold",
+                    "Start The Grand Tree (until you need to go to Hazelmere)",
+                    "[INV] Glarial's pebble, Nulodion's notes, ammo mould, rope, 6 air/water/earth runes, food",
+                    "Complete Waterfall Quest (should have a games neck to Barb, otherwise Minigame tele)",
+                    "Complete Dwarf Cannon (if you haven't already)",
+                    "Ardy cloak and walk south (or Trawler/NMZ Minigame tele) to get to Hazelmere, continue The Grand Tree",
+                    "[INV] Brooch, Scrying orb, Silverlight, armour, food, spade, strike casts, 53k coins",
+                    "Chronicle to Varrock",
+                    "Buy rune sword, green chaps/vambs, coif, black legs/helm from Champion's Guild",
+                    "Buy bronze sword from sword shop (for Horror From The Deep)",
+                    "Buy black platebody from Horvik",
+                    "Buy willow shortbow, maple shortbow, oak longbow, and 250 steel arrows from Lowe",
+                    "Talk to Reldo for The Lost Tribe",
+                    "Complete Enter The Abyss",
+                    "Complete Demon Slayer",
+                    "Ardy cloak tele, run to Battlefield, spirit tree to Gnome Stronghold",
+                    "Complete The Grand Tree",
+                    "Complete Jungle Potion",
+                    "Buy 5 antipoisons and 5 charcoal from Jiminua",
+                    "Dig for Clue hunter trousers outside of Jogre lair",
+                    "[Diary] Karamja Easy: Kill a jogre in the Pothole dungeon",
+                    "Keep jogre bones for Tai Bwo Wannai Trio",
+                    "Minigame teleport to Pest Control and bank for next section",
+                    "[Diary] Western Easy: Use Pest Control minigame teleport",
+                    "[Diary] Western Easy: Complete a novice game of Pest Control"
+                ]
+            },
+            "Section 3: Graceful + Birdhouses": {
+                "3A. Unlocking Graceful": [
+                    "[INV] Strike casts, telegrab runes, gp, hammer, weapon, spade",
+                    "Boat to Port Sarim",
+                    "Kill Wormbrain in Port Sarim jail, telegrab map piece for Dragon Slayer I",
+                    "Boat to Zeah, go to Hosidius",
+                    "[Diary] Kourend/Kebos Easy: Kill a sand crab",
+                    "Plough fields to 5% Hosidius favour, make 150 fertilizer to 20% Hosidius favour",
+                    "Complete the Depths of Despair",
+                    "Make 700 more fertilizer to 100% Hosidius favour (XP from all the fertilizer gets 13 Farming)",
+                    "Mine Doric's Quest ores south of Hosidius (6 clay, 4 copper, 2 iron)",
+                    "Also mine 15 extra clay for future quests",
+                    "Complete The Queen of Thieves (grab stew from bank)",
+                    "[Diary] Kourend/Kebos Easy: Browse the Warrens General Store",
+                    "Train to at least 46,512 Thieving XP (level 42) at Fruit stalls",
+                    "[Diary] Kourend/Kebos Easy: Steal from a Hosidius fruit stall",
+                    "[INV] Brooch, blurite ore, pickaxe, hammer, food, Doric's Quest ores",
+                    "Teleport to Falador",
+                    "[Diary] Falador Medium: Teleport to Falador",
+                    "[Diary] Falador Medium: Pickpocket a Falador guard",
+                    "[Diary] Falador Easy: Find out your family crest from Sir Renitee",
+                    "Smith blurite bar in Falador",
+                    "Continue The Lost Tribe in Goblin Village",
+                    "Complete Doric's Quest",
+                    "[Diary] Falador Easy: Smith blurite limbs on Doric's anvil",
+                    "Complete Recruitment Drive",
+                    "Buy initiate plate and legs (quest gives helm for free)",
+                    "[INV] Knife, 2 buckets, silk, lobster pot, unfired bowl, mind bomb, 37k+ gp",
+                    "Get 2 buckets of sap north of Falador (use knife on evergreen tree)",
+                    "Go to Ice Mountain, talk to Oracle for Dragon Slayer I",
+                    "Go into Dwarven Mine, get map piece",
+                    "Go to pickaxe shop, buy adamant and rune pickaxes",
+                    "[INV] 18750 gp, hammer, saw, 4 oak planks, molten glass, 4 steel bars, house tele, axe, tbox, initiate armour",
+                    "Go to Seers Village",
+                    "Move POH to Hosidius",
+                    "Complete Elemental Workshop I",
+                    "[Diary] Kandarin Easy: Kill one of each elemental",
+                    "Barcrawl Seers Village",
+                    "Buy 20 stews from Seers Village pub",
+                    "[Diary] Kandarin Easy: Buy stew from Seers Village pub",
+                    "Start Merlin's Crystal (talk to Arthur, Gawain, and Lancelot, get bucket of wax)",
+                    "Buy in Catherby: big fishing net, two lobster pots",
+                    "Fish one cod and other fish for diary tasks",
+                    "[Diary] Kandarin Easy: Fish a mackerel in Catherby",
+                    "[Diary] Kandarin Medium: Fish and cook a bass in Catherby",
+                    "Continue Merlin's Crystal, kill Mordred, claim Excalibur",
+                    "[Diary] Falador Medium: Chop and burn willow logs in Taverley",
+                    "[Diary] Falador Medium: Pray at altar in Taverley wearing full initiate (stone circle)",
+                    "Tele to POH, leave and reenter in Building Mode",
+                    "[Diary] Kourend/Kebos Easy: Enter your POH in Hosidius",
+                    "Build POH workshop, Crafting Table 2 and craft 4 clockworks",
+                    "[INV] Pickaxe, SoA items (depending on gang), opal, cup of tea, gp, 2 ropes, p&m, vial, tinderbox, charcoal, melee weapon, 5k gp",
+                    "Teleport to Varrock",
+                    "Go to Cooking Guild, buy 10 garden pies",
+                    "Buy any elemental staves you don't have yet from Zaff",
+                    "Read altar for Merlin's Crystal",
+                    "Mine 50 essence for Priest in Peril if needed",
+                    "Complete Shield of Arrav",
+                    "Go towards Paterdomus, kill 2 bats near limestone mine, take both sets of bat bones",
+                    "Kill temple dog for Priest in Peril",
+                    "Start Elemental Workshop II (read book at Exam Centre)",
+                    "Complete The Dig Site",
+                    "Complete Varrock Museum cleaning finds (clean necklace + 5 other items)",
+                    "Talk to Historian Minas upstairs for quest-related Kudos",
+                    "[Diary] Varrock Easy: Speak to Curator Haig Halen after 50 Kudos",
+                    "Talk to Roald for Priest in Peril",
+                    "Buy 10 silk from Thessalia if you need it (for Enlightened Journey)",
+                    "Smith 7 bronze wire at Varrock West Bank",
+                    "Get 40 Agility on Varrock Rooftop course",
+                    "[Diary] Varrock Medium: Complete Varrock Rooftop course",
+                    "Start Bone Voyage (until you need to go to Port Sarim)",
+                    "Complete Priest In Peril (50 unnoted essence needed for this part)",
+                    "Start Creature of Fenkenstrain (read sign in Canifis)",
+                    "Buy 1 raw shark",
+                    "[Diary] Morytania Easy: Kill a snail and craft a snelm (kill 2 thin snails and take meat)",
+                    "[Diary] Morytania Easy: Kill a Canifis civilian with wolfbane",
+                    "[Diary] Morytania Easy: Get a slayer task from Mazchna",
+                    "[Diary] Morytania Easy: Tan a hide at Sbott (make a hard leather)",
+                    "Train at Canifis Rooftop course until you have a total of 260 marks of grace",
+                    "[Diary] Morytania Medium: Complete Canifis Rooftop course",
+                    "Tele to Burthorpe (minigame tele or games neck)",
+                    "Buy 5 Asgarnian ales & 12 wizard's mind bombs from bartender",
+                    "Buy full graceful set"
+                ],
+                "3B. Unlocking Fossil Island": [
+                    "Go to Lumbridge",
+                    "[INV] Brooch, pickaxe, light source, eye of newt, greenman's ale, rotten tomato, ashes, fruit blast, gp, weapon",
+                    "Complete RFD Introduction",
+                    "Complete The Lost Tribe",
+                    "Buy a bone c'bow and 1k bone bolts",
+                    "[Diary] Lumbridge Easy: Slay a cave bug in Lumbridge Swamp Caves",
+                    "(Optional) Complete Death to the Dorgeshuun",
+                    "Start Lost City (until you need to go to Entrana)",
+                    "Teleport to Camelot (or walk from Ardougne if below 45 Magic)",
+                    "[Diary] Kandarin Medium: Teleport to Camelot",
+                    "Complete Merlin's Crystal",
+                    "Start Holy Grail (talk to Arthur and Merlin)",
+                    "Move POH to Pollnivneach",
+                    "Complete Elemental Workshop II",
+                    "[Diary] Kandarin Medium: Create a mind helmet",
+                    "[INV] (strike casts, food, no armour/weapons)",
+                    "Go to Port Sarim",
+                    "Continue Bone Voyage in Port Sarim bar",
+                    "Talk to High Priest on Entrana for Holy Grail",
+                    "Complete Lost City",
+                    "[Diary] Falador Easy: Go to Entrana",
+                    "Chop five dramen branches but only create one staff",
+                    "[INV] Stake, garlic, melee gear, food, spade, pickaxe",
+                    "Go to Draynor Manor",
+                    "Go upstairs to get whistles and napkin for Holy Grail",
+                    "Complete Vampyre Slayer",
+                    "Dig up skull in grave behind Draynor Manor for Fairytale I",
+                    "Ardy cloak tele",
+                    "Get 41 mining at Ardougne Monastery iron (bank the ores)",
+                    "Buy at least 5 rubies from Ardougne gem stall",
+                    "Buy sand/soda ash at Port Khazard until you have enough for 40 Crafting",
+                    "Get 47 Magic at this time if you didn't earlier",
+                    "Telegrab 25 gold bars under Varrock West Bank",
+                    "Craft and enchant as many digsite pendants as you can (minimum 5)",
+                    "Complete Bone Voyage (bring digsite pendant)",
+                    "Unlock House on the Hill teleport and mushtrees (except sticky swamp)",
+                    "Start birdhouse runs with best logs possible, do them as often as possible from this point onward"
+                ]
+            },
+            "Section 4: Unlocking Farming": {
+                "4A. Fairy Rings & Blackjacking": [
+                    "[INV] Pickaxe, Excalibur, 2 magic whistles, gear to fight Black Knight Titan",
+                    "Sail to Brimhaven",
+                    "[Diary] Karamja Easy: Mine gold ore NW of Brimhaven",
+                    "Continue Holy Grail (kill titan)",
+                    "Cloak tele and sail to Brimhaven again",
+                    "Complete Karamja Easy Diary, use XP on Herblore",
+                    "Complete Holy Grail",
+                    "[Diary] Kandarin Easy: Get tea from Galahad",
+                    "[Diary] Kandarin Easy: Cross coal trucks log shortcut",
+                    "[Diary] Kandarin Medium: Mine coal at coal trucks",
+                    "Go to Al-Kharid",
+                    "Smelt 5 silver bars, craft sickle and unstrung holy symbol",
+                    "[INV] Any gloves, 4 buckets, gp, strike/magic casts, magic attack gear",
+                    "Complete The Feud",
+                    "[Diary] Desert Easy: Travel to Pollnivneach by carpet",
+                    "Get 4 Ugthanki dung",
+                    "Get 50 Thieving via Blackjacking",
+                    "(Optional) Unlock rune shop from Ali Morrisane",
+                    "[INV] Silver sickle, Ghostspeak amulet, Dramen staff, farming equipment, weapon, food, 6 free spaces",
+                    "Complete Nature Spirit",
+                    "[Diary] Morytania Easy: Enter Mort Myre Swamp",
+                    "[Diary] Morytania Easy: Restore prayer at grotto",
+                    "Complete Fairytale I",
+                    "Start Fairytale II, unlock Fairy Rings (no levels or items required)",
+                    "[Diary] Ardougne Medium: Travel to Unicorn Pen Fairy Ring (BIS)",
+                    "[Diary] Ardougne Medium: Travel to Empty Island Fairy Ring (AIR)",
+                    "[Diary] Kandarin Medium: Travel to McGrubor's Wood Fairy Ring (ALS)",
+                    "[Diary] Kourend Medium: Travel to Mount Karuulm Fairy Ring (CIR)",
+                    "[Diary] Lumbridge Medium: Travel to Wizards' Tower Fairy Ring (DIS)",
+                    "Start doing seaweed runs with birdhouses (use Garden pies to boost to 23)",
+                    "On one of your birdhouse runs, mine 300 volcanic ash and use this on the compost bin in Catherby",
+                    "[Diary] Kandarin Easy: Get a pet fish from Harry in Catherby",
+                    "Tele to Burthorpe (minigame tele or games neck)",
+                    "Buy 50-100 lockpicks in Rogue's Den",
+                    "[Diary] Falador Hard: Crack a wall safe",
+                    "Complete Rogue's Den for full Rogue outfit",
+                    "POH tele to Pollnivneach wearing Rogue outfit",
+                    "[Diary] Desert Medium: Enter POH via Pollnivneach house portal",
+                    "Blackjack until 85 Thieving"
+                ],
+                "4B. Guardians of the Rift": [
+                    "Move POH to Hosidius",
+                    "POH tele to Hosidius",
+                    "Buy from Vannah: basket pack, sack pack, plant pot pack, bucket pack",
+                    "Go to Arceuus",
+                    "Pay 80k to unlock Fairy Ring CIS (north of library)",
+                    "Find books in Arceuus library to 50% favour, put XP on Runecrafting",
+                    "[Diary] Kourend/Kebos Easy: Hand in a book at the Arceuus library",
+                    "Complete The Ascent of Arceuus",
+                    "(Optional) Find books in Arceuus library to 100% favour",
+                    "Complete Temple of the Eye",
+                    "Play Guardians of the Rift until 400 pearls, purchase Ring of the Elements",
+                    "[Diary] Wilderness Easy: Enter the Chaos runecrafting temple",
+                    "[Diary] Wilderness Easy: Have Mage of Zamorak teleport you into Abyss",
+                    "[Diary] Varrock Easy: Craft some earth runes",
+                    "[Diary] Lumbridge Medium: Craft some lava runes at the Fire altar",
+                    "[Diary] Lumbridge Easy: Craft some water runes",
+                    "Buy seeds from Olivia (1 marigold, 6 cabbage, 6 onion needed for Garden of Tranquility)",
+                    "If you got at least 52 Mining from GotR, mine 1k volcanic ash during your next birdhouse run"
+                ],
+                "4C. Farming Quests": [
+                    "[INV] Food, antipoisons, strange fruits, Kharedst's Memoirs, Dramen staff",
+                    "Fairy Ring BLS to Southern Kebos Lowlands",
+                    "Complete The Garden of Death (gets 30 Farming instantly)",
+                    "[INV] All farming tools, hammer, silver bar, g'speak ammy, 3 bronze wire, needle, 5 thread, spade, telegrab, 3 papyrus, ball of wool, potato sack, unlit candle",
+                    "Start Enlightened Journey (Complete through the 'Getting started' section)",
+                    "Plant Auguste's sapling in Falador, protect with basket of apples",
+                    "Complete Creature of Fenkenstrain",
+                    "[INV] Ring of charos, all farming tools, 2 plant cures, marigold seed, cabbage seeds, onion seeds, hammer, 1 pure ess, pestle/mortar, plant pot, 2 compost",
+                    "Complete Garden of Tranquility",
+                    "[Diary] Varrock Medium: Harvest a white tree fruit",
+                    "[Diary] Varrock Medium: Select colour for kitten (wear activated ring of charos)",
+                    "Complete RFD Goblins",
+                    "Complete RFD Mountain Dwarf",
+                    "Get 42 Crafting and craft 2 fishbowls",
+                    "Complete RFD Pirate Pete",
+                    "Complete Enlightened Journey",
+                    "Unlock balloon routes to Castle Wars and Varrock for diaries",
+                    "[Diary] Varrock Medium: Use the balloon to travel *from* Varrock",
+                    "[Diary] Ardougne Medium: Use balloon to travel *to* Castle Wars",
+                    "POH tele to Hosidius",
+                    "Unlock Tithe Farm minigame teleport by entering minigame area",
+                    "Move POH to Rellekka (10k gp)",
+                    "Gradually work up to 54 Farming with seaweed, seeds from birdhouse runs/Wintertodt, etc.",
+                    "At 54 Farming play Tithe Farm until 65 Farming (get extra watering cans, 10 total)",
+                    "At 65 Farming start doing Medium contracts at Guild",
+                    "[Diary] Kourend/Kebos Medium: Enter the Farming Guild",
+                    "Continue training to 70 Farming required for SotE"
+                ]
+            },
+            "Section 5: Quests that require a lot of items": {
+                "Main tasks": [
+                    "If you have a kitten grow into a cat, do NOT turn it in yet",
+                    "Get 27 Hunter if you don't have it yet",
+                    "Create sapphire amulet (strung, not enchanted) and 2 necklaces of passage",
+                    "[INV] Yellow dye, swamp tar, 50 coins, spade",
+                    "Necklace of Passage tele to Outpost",
+                    "Start Making History (talk to Jorral)",
+                    "Start Eagles' Peak (until you need to go to Varrock)",
+                    "Continue Making History (Ardougne, Rellekka sections)",
+                    "Continue Eagles' Peak in Varrock",
+                    "Buy swordfish and karambwans from Alfonse the Waiter in Brimhaven for upcoming boss fights",
+                    "[INV] Strike casts/weapons/armour, maze key, food, hammer, 3 planks, 90 steel nails, 2k gp, prior map pieces",
+                    "Continue Dragon Slayer I",
+                    "Go to Rimmington, complete Melzar's Maze, get map piece, create Crandor map",
+                    "Go to Port Sarim, buy and repair boat",
+                    "Go to Draynor, hire Ned to captain your boat",
+                    "[Diary] Lumbridge Easy: Kill zombie in Draynor Sewers",
+                    "[Diary] Lumbridge Medium: Chop willow logs in Draynor",
+                    "[Diary] Lumbridge Medium: Pickpocket Martin the Master Gardener",
+                    "[INV] Antifire shield, weapon/casts, full inv of food",
+                    "Go to Crandor for Dragon Slayer I, enter dungeon, resurface, enter again",
+                    "[Diary] Karamja Medium: Visit Crandor via Karamja Dungeon",
+                    "Open Crandor shortcut in dungeon before fighting Elvarg",
+                    "[Diary] Karamja Medium: Use hidden wall in Karamja Dungeon",
+                    "Kill Elvarg, take head",
+                    "Pick up 4 red spiders eggs after defeating Elvarg",
+                    "Minigame tele to Soul Wars",
+                    "Complete Dragon Slayer I",
+                    "Buy rune platebody and green d'hide body from Oziach",
+                    "Grab unstrung holy symbol and ball of wool from bank, create strung symbol",
+                    "Go to Monastery, bless holy symbol",
+                    "[INV] 20+ gp, gold bar, tbox, pickaxe, 2 rope, guam pot unf, light source, p&m, bat bones, dragon bones",
+                    "Complete Watchtower",
+                    "[Diary] Ardougne Medium: Collect cave nightshade from Skavid caves",
+                    "[INV] 1 of each ele rune, bronze sword, any arrow, glass, tbox, hammer, 60 nails, 2 planks, swamp tar",
+                    "Complete Horror From The Deep",
+                    "[Diary] Kandarin Medium: Complete 1 lap of Barbarian agility course",
+                    "[INV] vial, p&m, papyrus, 4 soft clay, chisel, necklace of passage, waterskins, bird snare, axe, pickaxe",
+                    "Complete The Golem",
+                    "[Diary] Desert Medium: Cut teak tree at Uzer",
+                    "[Diary] Desert Medium: Steal a phoenix feather from the Desert phoenix",
+                    "[Diary] Desert Easy: Mine 5 clay in northern desert",
+                    "[Diary] Desert Easy: Catch a golden warbler",
+                    "[INV] Silverlight, strange implement, black armour, silver bar",
+                    "Complete Shadow of the Storm",
+                    "[Diary] Desert Medium: Travel to Uzer via carpet",
+                    "Complete RFD Evil Dave (fully grown cat, about 10 stews)",
+                    "Get 18 Slayer, recommended to use bone cbow to train Ranged in the process",
+                    "Superheat 7 iron ores into bars",
+                    "Smith 1 iron spit",
+                    "Cook nettle tea (nettles into bowl of water on range)",
+                    "Go to Draynor Manor",
+                    "Start Animal Magnetism (talk to Ava)",
+                    "[INV] 6 pots, 12 buckets of slime, weapons/armour, g'speak ammy, sapphire amulet, dramen staff, axe",
+                    "Go to Haunted Woods Fairy Ring (ALQ)",
+                    "[Diary] Morytania Medium: Obtain bark from hollow tree",
+                    "Kill 6 chickens, grind bones into bonemeal, repeat for another 6 bonemeal, claim 60 Ecto-tokens",
+                    "[Diary] Morytania Easy: Offer bonemeal at Ectofuntus",
+                    "Start Ghosts Ahoy at Velorina, continue until needing to visit Old Crone",
+                    "Continue Making History at Droalak",
+                    "[Diary] Morytania Easy: Cook a thin snail on the Port Phasmatys range",
+                    "[INV] Ectotokens, milk, nettle tea, bowl of water, g'speak ammy, silk, needle, thread, knife, spade, dyes, oak longbow, 400+ gp, earmuffs, gear to kill lvl 32 lobster, ghoul, and banshee",
+                    "Continue Animal Magnetism at Alice",
+                    "Go to Crone, continue Ghosts Ahoy and Animal Magnetism",
+                    "[Diary] Morytania Easy: Kill a banshee in the Slayer Tower",
+                    "[Diary] Morytania Easy: Kill a ghoul",
+                    "Fairy ring from Canifis to Haunted Woods to get back to farm",
+                    "Continue Animal Magnetism until given undead chickens",
+                    "Complete Ghosts Ahoy",
+                    "[Diary] Morytania Medium: Visit Dragontooth Isle",
+                    "[Diary] Morytania Medium: Use ectophial teleport",
+                    "[INV] 5 iron bars, hammer, undead chickens, mith axe, buttons, hard leather, holy symbol, games neck",
+                    "Complete Animal Magnetism",
+                    "[INV] 2 eagle capes, 2 fake beaks, enchanted key, chest, scroll, rope, varrock tele",
+                    "Necklace of Passage tele to Outpost",
+                    "Complete Making History",
+                    "Complete Eagles' Peak",
+                    "[Diary] Varrock Medium: Cast teleport to Varrock",
+                    "[Diary] Fremennik Medium: Travel to polar hunter area via eagle",
+                    "[Diary] Western Medium: Travel to jungle hunter area via eagle",
+                    "[Diary] Desert Medium: Travel to desert hunter area via eagle"
+                ]
+            },
+            "Section 6: Quests that require a lot of time": {
+                "Main tasks": [
+                    "[INV] Gear to kill wolves, axe, 100 feathers, knife, hammer, chisel, food",
+                    "Complete Big Chompy Bird hunting",
+                    "Make at least 20 ogre arrows",
+                    "Get 2 extra raw chompies for RFD Skrach",
+                    "[INV] Milk, egg, flour, cake tin",
+                    "Complete RFD Lumbridge Guide",
+                    "[INV] Gear to kill chompies, axe, iron spit, raw chompy, tbox, pickaxe, ball of wool, bellows",
+                    "Complete RFD Skrach",
+                    "Complete RFD Evil Dave if you didn't earlier",
+                    "Buy adamant gloves",
+                    "[INV] 2 ropes, bow/arrows, spade, plank, bucket, tinderbox, strike casts, graceful outfit, food",
+                    "Complete Underground Pass",
+                    "Upgrade staff to 2500 casts after quest",
+                    "[Diary] Ardougne Medium: Upgrade Iban's staff",
+                    "If you did NOT get 43 Prayer earlier, kill Blue dragons in Taverley Dungeon w/ Iban's",
+                    "[INV] 6k gp, tbox, raw shark, Iban's + runes, melee gear, bucket, axe, tbox",
+                    "Complete The Fremennik Trials",
+                    "[Diary] Fremennik Easy: Fill bucket at Rellekka well",
+                    "[Diary] Fremennik Easy: Chop and burn oak logs near POH portal",
+                    "Buy Berserker helm after quest",
+                    "[Diary] Fremennik Easy: Change boots with Yrsa",
+                    "[INV] Bird snare, butterfly net, butterfly jar, weapon, pickaxe, tiara mould, house tele runes",
+                    "[Diary] Fremennik Medium: Travel to Miscellania by fairy ring CIP",
+                    "Fairy ring to DKS",
+                    "[Diary] Fremennik Easy: Kill 5 rock crabs",
+                    "[Diary] Fremennik Easy: Catch a cerulean twitch in the polar hunter area",
+                    "[Diary] Fremennik Medium: Catch a snowy knight in the polar hunter area",
+                    "Enter cave, start The Giant Dwarf, sail into Keldagrim",
+                    "[Diary] Fremennik Easy: Browse stonemason's shop",
+                    "[Diary] Fremennik Easy: Steal from Keldagrim crafting or baker's stall",
+                    "[Diary] Fremennik Hard: Steal from Keldagrim gem stall",
+                    "POH tele to Rellekka",
+                    "[Diary] Fremennik Medium: Steal from Rellekka fish stall",
+                    "[Diary] Fremennik Medium: Mine coal in Rellekka",
+                    "[Diary] Fremennik Easy: Mine silver ore, craft tiara in Rellekka",
+                    "Sail to Waterbirth Island",
+                    "[Diary] Fremennik Easy: Collect 5 snape grass on Waterbirth Island",
+                    "[INV] Spade, lit candle, rope, bronze wire, chisel, 3 bones, Iban's + runes, antipoison",
+                    "Complete Shilo Village",
+                    "[Diary] Karamja Medium: Mine a red topaz from a gem rock",
+                    "[Diary] Karamja Medium: Take the Lady of the Waves to Port Khazard",
+                    "Get 49 crafting if needed",
+                    "Kill cave crawlers for whiteberries if needed",
+                    "Start The Hand in the Sand until you pickpocket sand from Sandy",
+                    "Go to Tai Bwo Wannai Village",
+                    "Start Tai Bwo Wannai Trio until you get karambwan vessels (get three total)",
+                    "Get 6 tickets from Brimhaven Agility Arena and buy 2 toadflaxes",
+                    "[Diary] Karamja Medium: Claim a ticket from the Brimhaven Agility Arena",
+                    "Complete The Hand in the Sand",
+                    "[Diary] Ardougne Medium: Collect daily sand from Bert",
+                    "Get 50 crafting, make an amulet of strength if you don't have one yet",
+                    "Get 30 Herblore if needed",
+                    "[Diary] Karamja Medium: Use Vigroy/Hajedy's cart",
+                    "Complete One Small Favour",
+                    "Complete Tai Bwo Wannai Trio",
+                    "[Diary] Karamja Medium: Catch a karambwan",
+                    "Make some prayer potions and energy potions if you are out of strange fruits",
+                    "Complete Monkey Madness I",
+                    "[Diary] Karamja Medium: Use gnome glider to travel to Karamja",
+                    "[Diary] Karamja Medium: Charter a ship from Karamja shipyard",
+                    "Buy dragon scimitar after quest",
+                    "[INV] 60+ gp, 10 bread, 10 trout, iron bar, asgarnian ale, food for Troll Stronghold, games necklace",
+                    "Complete Death Plateau",
+                    "Complete Troll Stronghold",
+                    "[Diary] Fremennik Easy: Enter the Troll Stronghold",
+                    "(Optional) Complete Eadgar's Ruse",
+                    "(Optional) Complete My Arm's Big Adventure"
+                ]
+            },
+            "Section 7: Unlocking the Mid Game": {
+                "Main tasks": [
+                    "Plant limpwurt seeds in flower patches if you haven't done so yet (need 20 for Temple of Ikov)",
+                    "Get 50 mining if needed",
+                    "Complete Sleeping Giants",
+                    "Complete Heroes' Quest",
+                    "[Diary] Ardougne Medium: Cast teleport to Ardougne",
+                    "[Diary] Ardougne Medium: Pickpocket master farmer north of Ardougne",
+                    "Complete Temple of Ikov",
+                    "Complete Family Crest",
+                    "[Diary] Wilderness Easy: Collect 5 red spiders eggs in Edgeville Dungeon",
+                    "[Diary] Wilderness Easy: Kill an earth warrior in Edgeville Dungeon",
+                    "Get 12 magic logs if you still need them",
+                    "Complete Desert Treasure",
+                    "[Diary] Kandarin Hard: Slay a shadow hound in the Shadow Dungeon",
+                    "[Diary] Desert Hard: Use altar to change spellbook",
+                    "Start Legends Quest until able access to Kharazi Jungle",
+                    "Complete RFD Sir Amik Varze",
+                    "Buy rune gloves",
+                    "Complete Regicide",
+                    "Get 60 Ranged and 69 Agility",
+                    "Complete Roving Elves",
+                    "Start MEP1 with Eluned immediately afterwards to unlock Lletya",
+                    "Complete Mourning's End Part I",
+                    "Complete Mourning's End Part II",
+                    "Get 70 Cooking",
+                    "Complete RFD Awowogei",
+                    "You should now have 175 QP",
+                    "Complete RFD Finale",
+                    "Buy barrows gloves",
+                    "Train melee through Slayer",
+                    "Get 60 Attack, then 70 Strength",
+                    "Get all defenders at Warriors' Guild",
+                    "Get 70 Mining at Motherlode Mine and/or mining sandstone in quarry",
+                    "Get 70 Smithing at Giants' Foundry and/or Blast Furnace",
+                    "Get 70 Hunter at Birdhouses, Salamanders, Red Chinchompas",
+                    "Get 70 Construction via Mahogany Homes",
+                    "Get 70 Farming doing Guild activities, usual runs, and Tithe Farm",
+                    "Get 70 Herblore doing as many herb runs as often as possible",
+                    "Get Infinity boots and Bones to Peaches from Mage Training Arena",
+                    "(Optional) Get Master wand too",
+                    "Go to Wizard's Guild and buy mystic top, bottom, and hat",
+                    "Get 80 Magic, complete Mage Arena I and II (HCIMs can just do the first one)",
+                    "Complete Song of the Elves",
+                    "Obtain a Bow of Faerdhinen and full Crystal armour from Corrupted Gauntlet"
+                ]
+            }
+        };
+
+        function generateGuideHTML() {
+            const content = document.getElementById('guideContent');
+            let taskId = 0;
+
+            for (const [sectionTitle, sectionData] of Object.entries(guideData)) {
+                const section = document.createElement('div');
+                section.className = 'section';
+
+                const sectionHeader = document.createElement('div');
+                sectionHeader.className = 'section-header';
+                sectionHeader.innerHTML = `
+                    <span>${sectionTitle}</span>
+                    <span class="toggle">▼</span>
+                `;
+                sectionHeader.onclick = function() {
+                    this.classList.toggle('collapsed');
+                    this.nextElementSibling.classList.toggle('collapsed');
+                };
+
+                const sectionContent = document.createElement('div');
+                sectionContent.className = 'section-content';
+
+                for (const [subsectionTitle, tasks] of Object.entries(sectionData)) {
+                    const subsection = document.createElement('div');
+                    subsection.className = 'subsection';
+
+                    if (subsectionTitle !== 'introduction' && subsectionTitle !== 'tasks' && subsectionTitle !== 'notes') {
+                        const subsectionTitleDiv = document.createElement('div');
+                        subsectionTitleDiv.className = 'subsection-title';
+                        subsectionTitleDiv.textContent = subsectionTitle;
+                        subsection.appendChild(subsectionTitleDiv);
+                    }
+
+                    tasks.forEach(taskText => {
+                        if (subsectionTitle === 'introduction' || subsectionTitle === 'notes') {
+                            const note = document.createElement('div');
+                            note.className = subsectionTitle === 'introduction' ? 'important' : 'note';
+                            note.textContent = taskText;
+                            subsection.appendChild(note);
+                        } else {
+                            const task = document.createElement('div');
+                            task.className = 'task';
+                            
+                            if (taskText.includes('[Diary]')) {
+                                task.classList.add('diary');
+                            } else if (taskText.includes('[INV]')) {
+                                task.classList.add('inventory');
+                            } else if (taskText.includes('(Optional)')) {
+                                task.classList.add('optional');
+                            }
+
+                            const checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.id = `task-${taskId}`;
+                            checkbox.onchange = saveProgress;
+
+                            const label = document.createElement('label');
+                            label.htmlFor = `task-${taskId}`;
+                            label.textContent = taskText;
+
+                            task.appendChild(checkbox);
+                            task.appendChild(label);
+                            subsection.appendChild(task);
+                            taskId++;
+                        }
+                    });
+
+                    sectionContent.appendChild(subsection);
+                }
+
+                section.appendChild(sectionHeader);
+                section.appendChild(sectionContent);
+                content.appendChild(section);
+            }
+
+            updateStats();
+        }
+
+        function saveProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const progress = {};
+            checkboxes.forEach(cb => {
+                progress[cb.id] = cb.checked;
+            });
+            localStorage.setItem('ironmanGuideProgress', JSON.stringify(progress));
+            updateStats();
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('ironmanGuideProgress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                for (const [id, checked] of Object.entries(progress)) {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) {
+                        checkbox.checked = checked;
+                    }
+                }
+            }
+            updateStats();
+        }
+
+        function updateStats() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const total = checkboxes.length;
+            const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const remaining = total - completed;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('completedTasks').textContent = completed;
+            document.getElementById('remainingTasks').textContent = remaining;
+            
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+        }
+
+        function expandAll() {
+            document.querySelectorAll('.section-header').forEach(header => {
+                header.classList.remove('collapsed');
+                header.nextElementSibling.classList.remove('collapsed');
+            });
+        }
+
+        function collapseAll() {
+            document.querySelectorAll('.section-header').forEach(header => {
+                header.classList.add('collapsed');
+                header.nextElementSibling.classList.add('collapsed');
+            });
+        }
+
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+                localStorage.removeItem('ironmanGuideProgress');
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                    cb.checked = false;
+                });
+                updateStats();
+            }
+        }
+
+        function exportProgress() {
+            const saved = localStorage.getItem('ironmanGuideProgress');
+            if (saved) {
+                const blob = new Blob([saved], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'ironman-guide-progress.json';
+                a.click();
+                URL.revokeObjectURL(url);
+            } else {
+                alert('No progress to export!');
+            }
+        }
+
+        function importProgress() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'application/json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        try {
+                            const progress = JSON.parse(event.target.result);
+                            localStorage.setItem('ironmanGuideProgress', JSON.stringify(progress));
+                            loadProgress();
+                            alert('Progress imported successfully!');
+                        } catch (error) {
+                            alert('Error importing progress. Please make sure the file is valid.');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            generateGuideHTML();
+            loadProgress();
+        });
+    </script>
+</body>
+</html>
