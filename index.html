@@ -183,6 +183,10 @@
       border-bottom: none;
     }
 
+    .task-item.info-only {
+      padding-left: 0;
+    }
+
     .task-label {
       display: flex;
       gap: 0.75rem;
@@ -290,6 +294,10 @@
       const resetBtn = document.getElementById('resetProgress');
       const expandBtn = document.getElementById('expandAll');
       const collapseBtn = document.getElementById('collapseAll');
+      const INFO_ONLY_TITLES = [
+        'guide overview',
+        'section 0: setup/general notes',
+      ];
 
       const RAW_GUIDE = String.raw`
 Bofa Rush Ironman v1.4 by Kirbuti (last update: 28 July 2023)
@@ -1926,6 +1934,11 @@ PvM Progresion after Gauntlet, Zulrah, DWH, and Trident
         });
       }
 
+      function shouldRenderInfoOnly(title) {
+        const normalized = title.trim().toLowerCase();
+        return INFO_ONLY_TITLES.some((key) => normalized === key || normalized.startsWith(key));
+      }
+
       function parseGuide(raw) {
         const lines = raw.split(/\r?\n/);
         const preface = [];
@@ -1942,10 +1955,12 @@ PvM Progresion after Gauntlet, Zulrah, DWH, and Trident
           notes: [],
           tasks: [],
           subsections: [],
+          infoOnly: false,
         });
 
         const startSection = (title) => {
           const node = createNode(title.trim());
+          node.infoOnly = shouldRenderInfoOnly(node.title);
           sections.push(node);
           currentSection = node;
           currentSubsection = null;
@@ -2139,30 +2154,39 @@ PvM Progresion after Gauntlet, Zulrah, DWH, and Trident
 
         if (node.tasks.length) {
           const list = document.createElement('ul');
-          list.className = 'task-list';
+          list.className = `task-list${node.infoOnly ? ' info-only' : ''}`;
           node.tasks.forEach((taskText) => {
             const item = document.createElement('li');
-            item.className = 'task-item';
+            item.className = `task-item${node.infoOnly ? ' info-only' : ''}`;
             item.dataset.text = taskText.toLowerCase();
-            const label = document.createElement('label');
-            label.className = 'task-label';
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.className = 'task-checkbox';
-            const taskId = makeTaskId([...currentPath, taskText]);
-            checkbox.dataset.taskId = taskId;
-            checkbox.checked = Boolean(progressState[taskId]);
-            checkbox.addEventListener('change', () => {
-              progressState[taskId] = checkbox.checked;
-              saveProgress(progressState);
-              updateStats();
-            });
-            const textSpan = document.createElement('span');
-            textSpan.className = 'task-text';
-            buildRichText(taskText, textSpan);
-            label.appendChild(checkbox);
-            label.appendChild(textSpan);
-            item.appendChild(label);
+
+            if (node.infoOnly) {
+              const textSpan = document.createElement('span');
+              textSpan.className = 'task-text';
+              buildRichText(taskText, textSpan);
+              item.appendChild(textSpan);
+            } else {
+              const label = document.createElement('label');
+              label.className = 'task-label';
+              const checkbox = document.createElement('input');
+              checkbox.type = 'checkbox';
+              checkbox.className = 'task-checkbox';
+              const taskId = makeTaskId([...currentPath, taskText]);
+              checkbox.dataset.taskId = taskId;
+              checkbox.checked = Boolean(progressState[taskId]);
+              checkbox.addEventListener('change', () => {
+                progressState[taskId] = checkbox.checked;
+                saveProgress(progressState);
+                updateStats();
+              });
+              const textSpan = document.createElement('span');
+              textSpan.className = 'task-text';
+              buildRichText(taskText, textSpan);
+              label.appendChild(checkbox);
+              label.appendChild(textSpan);
+              item.appendChild(label);
+            }
+
             list.appendChild(item);
           });
           details.appendChild(list);
