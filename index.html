@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bofa Rush Ironman Guide - Interactive Checklist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            font-style: italic;
+        }
+
+        .progress-bar-container {
+            margin: 20px 0;
+            background: #f0f0f0;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            border-radius: 15px;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: #333;
+            z-index: 1;
+        }
+
+        .section {
+            margin: 30px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #653a91 100%);
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .section-toggle {
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+
+        .section.collapsed .section-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            padding: 20px;
+            display: block;
+        }
+
+        .section.collapsed .section-content {
+            display: none;
+        }
+
+        .subsection {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+
+        .subsection-header {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subsection-toggle {
+            font-size: 0.9em;
+            transition: transform 0.3s ease;
+        }
+
+        .subsection.collapsed .subsection-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .subsection-content {
+            margin-top: 10px;
+        }
+
+        .subsection.collapsed .subsection-content {
+            display: none;
+        }
+
+        .task-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .task-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: flex-start;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .task-item:hover {
+            background: #f5f5f5;
+            transform: translateX(5px);
+        }
+
+        .task-item.completed {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        .task-checkbox {
+            margin-right: 12px;
+            margin-top: 3px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .task-text {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .expand-all, .collapse-all {
+            background: #764ba2;
+        }
+
+        .expand-all:hover, .collapse-all:hover {
+            background: #653a91;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .section-header h2 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bofa Rush Ironman Guide</h1>
+            <div class="subtitle">v1.4 by Kirbuti (last update: 28 July 2023)</div>
+        </header>
+
+        <div class="progress-bar-container">
+            <div>Overall Progress</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                <div class="progress-text" id="progressText">0% Complete</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="expandAll()">Expand All</button>
+            <button onclick="collapseAll()">Collapse All</button>
+            <button onclick="resetProgress()">Reset Progress</button>
+            <button onclick="showImportDialog()">Import Guide Content</button>
+        </div>
+
+        <!-- Import Dialog (hidden by default) -->
+        <div id="importDialog" style="display: none; margin: 20px 0; padding: 20px; background: #f9f9f9; border-radius: 8px; border: 2px solid #667eea;">
+            <h3 style="margin-bottom: 10px; color: #667eea;">Import Guide Content</h3>
+            <p style="margin-bottom: 15px; color: #666;">Paste your guide content below. The parser will automatically detect sections, subsections, and tasks.</p>
+            <textarea id="importText" style="width: 100%; min-height: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: monospace; font-size: 0.9em;" placeholder="Paste guide content here..."></textarea>
+            <div style="margin-top: 10px;">
+                <button onclick="parseAndImport()">Import</button>
+                <button onclick="hideImportDialog()" style="background: #999;">Cancel</button>
+            </div>
+        </div>
+
+        <div id="guideContent">
+            <!-- Content will be dynamically generated -->
+        </div>
+    </div>
+
+    <script>
+        // Guide data structure
+        const guideData = {
+            sections: [
+                {
+                    id: "section-0",
+                    title: "Section 0: Setup/General notes",
+                    subsections: [
+                        {
+                            id: "subsection-0-1",
+                            title: "General Notes",
+                            tasks: [
+                                "Create your Ironman account",
+                                "Set up your bank organization",
+                                "Familiarize yourself with the guide structure",
+                                "Join relevant Ironman communities/clans"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: "section-1",
+                    title: "Section 1: Unlocking Ardougne Cloak",
+                    subsections: [
+                        {
+                            id: "subsection-1-1",
+                            title: "Prerequisites",
+                            tasks: [
+                                "Complete Ardougne Easy Diary tasks",
+                                "Obtain required quest points",
+                                "Gather necessary items"
+                            ]
+                        },
+                        {
+                            id: "subsection-1-2",
+                            title: "Diary Tasks",
+                            tasks: [
+                                "Complete all Easy Diary tasks",
+                                "Claim Ardougne Cloak 1",
+                                "Unlock teleport to Ardougne"
+                            ]
+                        }
+                    ]
+                }
+                // Add more sections as needed
+            ]
+        };
+
+        // Initialize the page
+        function init() {
+            renderGuide();
+            loadProgress();
+            updateProgress();
+        }
+
+        // Render the guide structure
+        function renderGuide() {
+            const container = document.getElementById('guideContent');
+            container.innerHTML = '';
+
+            guideData.sections.forEach((section, sectionIndex) => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section';
+                sectionDiv.id = section.id;
+
+                const header = document.createElement('div');
+                header.className = 'section-header';
+                header.onclick = () => toggleSection(section.id);
+                header.innerHTML = `
+                    <h2>${section.title}</h2>
+                    <span class="section-toggle">▼</span>
+                `;
+
+                const content = document.createElement('div');
+                content.className = 'section-content';
+
+                section.subsections.forEach((subsection, subIndex) => {
+                    const subDiv = document.createElement('div');
+                    subDiv.className = 'subsection';
+                    subDiv.id = subsection.id;
+
+                    const subHeader = document.createElement('div');
+                    subHeader.className = 'subsection-header';
+                    subHeader.onclick = () => toggleSubsection(subsection.id);
+                    subHeader.innerHTML = `
+                        <span>${subsection.title}</span>
+                        <span class="subsection-toggle">▼</span>
+                    `;
+
+                    const subContent = document.createElement('div');
+                    subContent.className = 'subsection-content';
+
+                    const taskList = document.createElement('ul');
+                    taskList.className = 'task-list';
+
+                    subsection.tasks.forEach((task, taskIndex) => {
+                        const taskId = `${subsection.id}-task-${taskIndex}`;
+                        const taskItem = document.createElement('li');
+                        taskItem.className = 'task-item';
+                        taskItem.id = taskId;
+
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.className = 'task-checkbox';
+                        checkbox.id = `checkbox-${taskId}`;
+                        checkbox.onchange = () => handleTaskChange(taskId);
+
+                        const taskText = document.createElement('span');
+                        taskText.className = 'task-text';
+                        taskText.textContent = task;
+
+                        taskItem.appendChild(checkbox);
+                        taskItem.appendChild(taskText);
+                        taskList.appendChild(taskItem);
+                    });
+
+                    subContent.appendChild(taskList);
+                    subDiv.appendChild(subHeader);
+                    subDiv.appendChild(subContent);
+                    content.appendChild(subDiv);
+                });
+
+                sectionDiv.appendChild(header);
+                sectionDiv.appendChild(content);
+                container.appendChild(sectionDiv);
+            });
+        }
+
+        // Toggle section collapse/expand
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.toggle('collapsed');
+        }
+
+        // Toggle subsection collapse/expand
+        function toggleSubsection(subsectionId) {
+            const subsection = document.getElementById(subsectionId);
+            subsection.classList.toggle('collapsed');
+        }
+
+        // Expand all sections
+        function expandAll() {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('collapsed');
+            });
+            document.querySelectorAll('.subsection').forEach(subsection => {
+                subsection.classList.remove('collapsed');
+            });
+        }
+
+        // Collapse all sections
+        function collapseAll() {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('collapsed');
+            });
+            document.querySelectorAll('.subsection').forEach(subsection => {
+                subsection.classList.add('collapsed');
+            });
+        }
+
+        // Handle task checkbox change
+        function handleTaskChange(taskId) {
+            const checkbox = document.getElementById(`checkbox-${taskId}`);
+            const taskItem = document.getElementById(taskId);
+            const isChecked = checkbox.checked;
+
+            // Update visual state
+            if (isChecked) {
+                taskItem.classList.add('completed');
+            } else {
+                taskItem.classList.remove('completed');
+            }
+
+            // Save to localStorage
+            saveProgress();
+            updateProgress();
+        }
+
+        // Save progress to localStorage
+        function saveProgress() {
+            const progress = {};
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                const taskId = checkbox.id.replace('checkbox-', '');
+                progress[taskId] = checkbox.checked;
+            });
+            localStorage.setItem('bofaRushProgress', JSON.stringify(progress));
+        }
+
+        // Load progress from localStorage
+        function loadProgress() {
+            const saved = localStorage.getItem('bofaRushProgress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                Object.keys(progress).forEach(taskId => {
+                    const checkbox = document.getElementById(`checkbox-${taskId}`);
+                    if (checkbox) {
+                        checkbox.checked = progress[taskId];
+                        const taskItem = document.getElementById(taskId);
+                        if (progress[taskId]) {
+                            taskItem.classList.add('completed');
+                        }
+                    }
+                });
+            }
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            const checked = document.querySelectorAll('.task-checkbox:checked');
+            const percentage = checkboxes.length > 0 
+                ? Math.round((checked.length / checkboxes.length) * 100) 
+                : 0;
+
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `${percentage}% Complete (${checked.length}/${checkboxes.length})`;
+        }
+
+        // Reset all progress
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+                localStorage.removeItem('bofaRushProgress');
+                document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                    checkbox.checked = false;
+                    const taskId = checkbox.id.replace('checkbox-', '');
+                    const taskItem = document.getElementById(taskId);
+                    taskItem.classList.remove('completed');
+                });
+                updateProgress();
+            }
+        }
+
+        // Show import dialog
+        function showImportDialog() {
+            document.getElementById('importDialog').style.display = 'block';
+        }
+
+        // Hide import dialog
+        function hideImportDialog() {
+            document.getElementById('importDialog').style.display = 'none';
+        }
+
+        // Parse and import guide content from text
+        function parseAndImport() {
+            const text = document.getElementById('importText').value.trim();
+            if (!text) {
+                alert('Please paste guide content first.');
+                return;
+            }
+
+            try {
+                const parsed = parseGuideText(text);
+                guideData.sections = parsed.sections;
+                localStorage.setItem('bofaRushGuideData', JSON.stringify(guideData));
+                renderGuide();
+                loadProgress();
+                updateProgress();
+                hideImportDialog();
+                alert('Guide content imported successfully!');
+            } catch (error) {
+                alert('Error parsing guide content: ' + error.message);
+            }
+        }
+
+        // Parse guide text into structured data
+        function parseGuideText(text) {
+            const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+            const sections = [];
+            let currentSection = null;
+            let currentSubsection = null;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                
+                // Detect section headers (e.g., "Section 0:", "Section 1:", etc.)
+                const sectionMatch = line.match(/^Section\s+(\d+)[:\-]?\s*(.*)$/i);
+                if (sectionMatch) {
+                    // Save previous section if exists
+                    if (currentSection) {
+                        sections.push(currentSection);
+                    }
+                    // Start new section
+                    const sectionNum = sectionMatch[1];
+                    const sectionTitle = sectionMatch[2] || `Section ${sectionNum}`;
+                    currentSection = {
+                        id: `section-${sectionNum}`,
+                        title: `Section ${sectionNum}: ${sectionTitle}`,
+                        subsections: []
+                    };
+                    currentSubsection = null;
+                    continue;
+                }
+
+                // Detect subsection headers (various patterns)
+                const subsectionPatterns = [
+                    /^(\d+\.\d+|\d+\.)\s+(.+)$/,  // "1.1 Title" or "1. Title"
+                    /^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*):?\s*$/,  // Title case words
+                    /^[-*]\s*(.+):?\s*$/  // "- Title:" or "* Title:"
+                ];
+
+                let isSubsection = false;
+                for (const pattern of subsectionPatterns) {
+                    const match = line.match(pattern);
+                    if (match && line.length < 100 && !line.startsWith('-') && !line.startsWith('•')) {
+                        // Check if next line is a task (starts with dash/bullet)
+                        const nextLine = i + 1 < lines.length ? lines[i + 1] : '';
+                        if (nextLine.match(/^[-•*]\s+/) || nextLine.match(/^(\d+\.|\d+\))\s+/)) {
+                            isSubsection = true;
+                            if (currentSubsection) {
+                                currentSection.subsections.push(currentSubsection);
+                            }
+                            const subsectionTitle = match[match.length - 1];
+                            currentSubsection = {
+                                id: `subsection-${currentSection.id}-${currentSection.subsections.length + 1}`,
+                                title: subsectionTitle,
+                                tasks: []
+                            };
+                            break;
+                        }
+                    }
+                }
+
+                if (isSubsection) {
+                    continue;
+                }
+
+                // Detect tasks (lines starting with dash, bullet, or number)
+                const taskMatch = line.match(/^[-•*]\s+(.+)$/) || line.match(/^(\d+[\.\)])\s+(.+)$/);
+                if (taskMatch) {
+                    const taskText = taskMatch[taskMatch.length - 1];
+                    // If no current subsection, create a default one
+                    if (!currentSubsection) {
+                        currentSubsection = {
+                            id: `subsection-${currentSection.id}-1`,
+                            title: 'Tasks',
+                            tasks: []
+                        };
+                    }
+                    currentSubsection.tasks.push(taskText);
+                    continue;
+                }
+
+                // If line doesn't match any pattern and we have a current subsection,
+                // it might be a continuation of the last task
+                if (currentSubsection && currentSubsection.tasks.length > 0 && line.length > 0) {
+                    const lastTask = currentSubsection.tasks[currentSubsection.tasks.length - 1];
+                    currentSubsection.tasks[currentSubsection.tasks.length - 1] = lastTask + ' ' + line;
+                }
+            }
+
+            // Don't forget the last section
+            if (currentSection) {
+                if (currentSubsection) {
+                    currentSection.subsections.push(currentSubsection);
+                }
+                sections.push(currentSection);
+            }
+
+            return { sections };
+        }
+
+        // Load guide data from localStorage if available
+        function loadGuideData() {
+            const saved = localStorage.getItem('bofaRushGuideData');
+            if (saved) {
+                try {
+                    const savedData = JSON.parse(saved);
+                    guideData.sections = savedData.sections;
+                } catch (e) {
+                    console.error('Error loading saved guide data:', e);
+                }
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadGuideData();
+            init();
+        });
+    </script>
+</body>
+</html>
